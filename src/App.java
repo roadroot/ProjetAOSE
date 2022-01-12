@@ -1,34 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
 
-abstract class Configuration {
-    static final int N = 5;
-    static final int M = 5;
-    static final int TILE_WIDTH = 60;
-    static final int TILE_HEIGHT = 60;
-    static int getWidth() {
-        return N * TILE_WIDTH;
-    }
-    static int getHeight() {
-        return M * TILE_HEIGHT;
-    }
-}
-
 public class App {
     public static void main(String[] args) throws Exception {
+        var conf = new Configuration("conf.json");
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         System.out.println("Hello, World!");
         JFrame f=new JFrame();
-        GridLayout g = new GridLayout(Configuration.N, Configuration.M);
+        GridLayout g = new GridLayout(conf.getWidth(), conf.getHeight());
         f.setLayout(g);
-        for(int i =0; i<Configuration.N; i++)
-            for(int j =0; j<Configuration.M; j++) {
+        var buttons = new JButton[conf.getWidth()][conf.getHeight()];
+        for(int i =0; i<conf.getWidth(); i++)
+            for(int j =0; j<conf.getHeight(); j++) {
                 // g.addLayoutComponent(name, comp);
-                var button = new JButton(i + " " + j);
-                button.setSize(Configuration.TILE_WIDTH, Configuration.TILE_HEIGHT);
-                f.add(button);
+                buttons[i][j] = new JButton();
+                buttons[i][j].setSize(conf.getTileWidth(), conf.getTileHeight());
+                f.add(buttons[i][j]);
             }
-        f.setSize(Configuration.getWidth(), Configuration.getHeight());
+        f.setSize(conf.getSquareWidth(), conf.getSquareHeight());
         f.setVisible(true);
     }
 }
