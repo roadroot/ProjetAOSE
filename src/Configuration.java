@@ -1,5 +1,6 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Map;
 
 import flexjson.JSONDeserializer;
@@ -12,10 +13,14 @@ public class Configuration {
     private static final String WORLD_HEIGHT = "height";
     private static final String WORLD_TILE_WIDTH = "tile width";
     private static final String WORLD_TILE_HEIGHT = "tile height";
+    private static final String AGENT_CONSUMPTION = "consumption";
+    private static final String AGENT_PRODUCTION = "production";
+    private static final String AGENT_ENERGY_TYPE = "energy type";
     private int width;
     private int height;
     private int titleWidth;
     private int titleHeight;
+    private ArrayList<Agent> agents;
     public int getSquareWidth() {
         return width * titleWidth;
     }
@@ -43,6 +48,11 @@ public class Configuration {
             height = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_HEIGHT);
             titleWidth = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_TILE_WIDTH);
             titleHeight = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_TILE_HEIGHT);
+            agents = new ArrayList<>();
+            var agentJson = (ArrayList<Map<String, Object>>) ((Map<String, Object>)json.get(AGENTS)).get(WORLD_TILE_HEIGHT);
+            for(var agentJ : agentJson) {
+                Agent a = new Agent((int) agentJ.get(AGENT_CONSUMPTION), (int) agentJ.get(AGENT_PRODUCTION), new EnergyType(agentJ.get(AGENT_ENERGY_TYPE)))
+            }
         } catch(ClassCastException e) {
             throw new Exception("Configuration does not contains all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
         } catch(NullPointerException e) {

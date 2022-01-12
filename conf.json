@@ -1,9 +1,24 @@
 {
-    "world" : {
-        "width" : 5,
-        "height" : 5,
-        "tile width" : 60,
-        "tile height" : 60
+    "world": {
+        "width": 5,
+        "height": 5,
+        "tile width": 60,
+        "tile height": 60
     },
-    "agents" : []
+    "agents": [
+        {
+            "consumption": 0,
+            "production": 100,
+            "energy type": "renewable",
+            "positionX": 0,
+            "positionY": 0
+        },
+        {
+            "consumption": 100,
+            "production": 0,
+            "energy type": "renewable",
+            "positionX": 4,
+            "positionY": 4
+        }
+    ]
 }
