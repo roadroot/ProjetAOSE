@@ -4,5 +4,6 @@
         "height" : 5,
         "tile width" : 60,
         "tile height" : 60
-    }
+    },
+    "agents" : []
 }

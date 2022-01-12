@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -6,7 +5,9 @@ import java.util.Map;
 import flexjson.JSONDeserializer;
 
 public class Configuration {
+    private static final String GITHUB = "https://github.com/roadroot/ProjetAOSE";
     private static final String WORLD = "world";
+    private static final String AGENTS = "agents";
     private static final String WORLD_WIDTH = "width";
     private static final String WORLD_HEIGHT = "height";
     private static final String WORLD_TILE_WIDTH = "tile width";
@@ -33,12 +34,19 @@ public class Configuration {
     public int getTileHeight() {
         return titleHeight;
     }
-    public Configuration(String path) throws IOException {
-        Map<String, Map<String, Object>> json = new JSONDeserializer<Map<String, Map<String, Object>>>().deserialize(Files.readString(Path.of(path)));
-        json.get(WORLD);
-        width = (int) json.get(WORLD).get(WORLD_WIDTH);
-        height = (int) json.get(WORLD).get(WORLD_HEIGHT);
-        titleWidth = (int) json.get(WORLD).get(WORLD_TILE_WIDTH);
-        titleHeight = (int) json.get(WORLD).get(WORLD_TILE_HEIGHT);
+    @SuppressWarnings("unchecked")
+    public Configuration(String path) throws Exception {
+        try {
+            Map<String, Object> json = new JSONDeserializer<Map<String, Object>>().deserialize(Files.readString(Path.of(path)));
+            json.get(WORLD);
+            width = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_WIDTH);
+            height = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_HEIGHT);
+            titleWidth = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_TILE_WIDTH);
+            titleHeight = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_TILE_HEIGHT);
+        } catch(ClassCastException e) {
+            throw new Exception("Configuration does not contains all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
+        } catch(NullPointerException e) {
+            throw new Exception("Configuration does not contains all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
+        }
     }
 }
