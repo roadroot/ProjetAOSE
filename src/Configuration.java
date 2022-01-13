@@ -16,6 +16,8 @@ public class Configuration {
     private static final String AGENT_CONSUMPTION = "consumption";
     private static final String AGENT_PRODUCTION = "production";
     private static final String AGENT_ENERGY_TYPE = "energy type";
+    private static final String AGENT_POSITION_X = "positionX";
+    private static final String AGENT_POSITION_Y = "positionY";
     private int width;
     private int height;
     private int titleWidth;
@@ -29,6 +31,9 @@ public class Configuration {
     }
     public int getWidth() {
         return width;
+    }
+    public ArrayList<Agent> getAgents() {
+        return agents;
     }
     public int getHeight() {
         return height;
@@ -51,7 +56,7 @@ public class Configuration {
             agents = new ArrayList<>();
             var agentJson = (ArrayList<Map<String, Object>>) json.get(AGENTS);
             for(var agentJ : agentJson) {
-                agents.add(new Agent((int) agentJ.get(AGENT_CONSUMPTION), (int) agentJ.get(AGENT_PRODUCTION), EnergyType.get((String) agentJ.get(AGENT_ENERGY_TYPE))));
+                agents.add(new Agent((int) agentJ.get(AGENT_CONSUMPTION), (int) agentJ.get(AGENT_PRODUCTION), EnergyType.get((String) agentJ.get(AGENT_ENERGY_TYPE)), (int) agentJ.get(AGENT_POSITION_X), (int) agentJ.get(AGENT_POSITION_Y)));
             }
         } catch(ClassCastException e) {
             throw new Exception("Configuration does not contains all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");

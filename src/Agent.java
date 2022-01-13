@@ -1,11 +1,21 @@
 public class Agent {
     private int consumption;
     private int production;
+    private int positionX;
+    private int positionY;
     private EnergyType energyType;
-    public Agent(int consumption, int production, EnergyType energyType) {
+    public Agent(int consumption, int production, EnergyType energyType, int x, int y) {
         this.consumption = consumption;
         this.production = production;
         this.energyType = energyType;
+        this.positionX = x;
+        this.positionY = y;
+    }
+    public int getPositionX() {
+        return positionX;
+    }
+    public int getPositionY() {
+        return positionY;
     }
     public int getConsumption() {
         return consumption;
