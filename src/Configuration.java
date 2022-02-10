@@ -1,5 +1,5 @@
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -47,15 +47,15 @@ public class Configuration {
     @SuppressWarnings("unchecked")
     public Configuration(String path) throws Exception {
         try {
-            Map<String, Object> json = new JSONDeserializer<Map<String, Object>>().deserialize(Files.readString(Path.of(path)));
+            Map<String, Object> json = new JSONDeserializer<Map<String, Object>>().deserialize(Files.readAllLines(Paths.get(path)).stream().reduce("", (l1, l2)->l1+"\n"+l2));
             json.get(WORLD);
             width = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_WIDTH);
             height = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_HEIGHT);
             titleWidth = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_TILE_WIDTH);
             titleHeight = (int) ((Map<String, Object>)json.get(WORLD)).get(WORLD_TILE_HEIGHT);
             agents = new ArrayList<>();
-            var agentJson = (ArrayList<Map<String, Object>>) json.get(AGENTS);
-            for(var agentJ : agentJson) {
+            ArrayList<Map<String, Object>> agentJson = (ArrayList<Map<String, Object>>) json.get(AGENTS);
+            for(Map<String, Object> agentJ : agentJson) {
                 agents.add(new Agent((int) agentJ.get(AGENT_CONSUMPTION), (int) agentJ.get(AGENT_PRODUCTION), EnergyType.get((String) agentJ.get(AGENT_ENERGY_TYPE)), (int) agentJ.get(AGENT_POSITION_X), (int) agentJ.get(AGENT_POSITION_Y)));
             }
         } catch(ClassCastException e) {
