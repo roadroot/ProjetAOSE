@@ -20,7 +20,7 @@ public class App {
                 buttons[i][j].setSize(conf.getTileWidth(), conf.getTileHeight());
                 f.add(buttons[i][j]);
             }
-        for(Agent v : conf.getAgents()) {
+        for(ParentAgent v : conf.getAgents()) {
             buttons[v.getPositionX()][v.getPositionY()].setIcon(new ImageIcon((new ImageIcon("resources/tile004.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
         }
         f.setSize(conf.getSquareWidth(), conf.getSquareHeight());
