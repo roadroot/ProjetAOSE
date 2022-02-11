@@ -2,7 +2,6 @@
     "java.project.sourcePaths": ["src", "distributed"],
     "java.project.outputPath": "bin",
     "cSpell.words": [
-        "Procumer",
         "Prosumer",
         "prosumers"
     ]

@@ -7,17 +7,69 @@
     },
     "agents": [
         {
-            "consumption": 0,
-            "production": 100,
-            "energy type": "renewable",
+            "name": "broker",
+            "type": 0
+        },
+        {
+            "name": "consumer 0",
+            "type": 1,
+            "consumption": [
+                {
+                    "amount": 100,
+                    "energy type": "renewable"
+                },
+                {
+                    "amount": 50,
+                    "energy type": "other"
+                }
+            ],
             "positionX": 0,
             "positionY": 0
         },
         {
-            "consumption": 100,
-            "production": 0,
-            "energy type": "renewable",
+            "name": "producer 1",
+            "type": 2,
+            "production": [
+                {
+                    "amount": 100,
+                    "energy type": "renewable",
+                    "price": 2
+                },
+                {
+                    "amount": 100,
+                    "energy type": "other",
+                    "price": 1
+                }
+            ],
             "positionX": 4,
+            "positionY": 4
+        },
+        {
+            "name": "prosumer 1",
+            "type": 3,
+            "production": [
+                {
+                    "amount": 100,
+                    "energy type": "renewable",
+                    "price": 2
+                },
+                {
+                    "amount": 100,
+                    "energy type": "other",
+                    "price": 1
+                }
+            ],
+            "consumption": [
+                {
+                    "amount": 100,
+                    "energy type": "renewable"
+                },
+                {
+                    "amount": 50,
+                    "energy type": "other"
+                }
+            ],
+            "positionX": 0,
             "positionY": 4
         }
     ]

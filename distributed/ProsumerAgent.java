@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
-public class ConsumerAgent extends ParentAgent {
+public class ProsumerAgent extends ParentAgent{
+    private ArrayList<Energy> production = new ArrayList<>();
     private ArrayList<Energy> consumption = new ArrayList<>();
     protected void setup()
     {
@@ -8,5 +9,8 @@ public class ConsumerAgent extends ParentAgent {
     }
     public ArrayList<Energy> getConsumption() {
         return consumption;
+    }
+    public ArrayList<Energy> getProduction() {
+        return production;
     }
 }

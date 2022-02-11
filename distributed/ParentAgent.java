@@ -7,12 +7,6 @@ public abstract class ParentAgent extends Agent {
     //     this.positionX = x;
     //     this.positionY = y;
     // }
-    public int getPositionX() {
-        return positionX;
-    }
-    public int getPositionY() {
-        return positionY;
-    }
     // public int getConsumption() {
     //     return consumption;
     // }
@@ -40,4 +34,16 @@ public abstract class ParentAgent extends Agent {
     // public boolean isGreenProsumer() {
     //     return consumption > 0 && production > 0 && energyType == EnergyType.RENEWABLE;
     // }
+    public int getPositionY() {
+        return positionY;
+    }
+    public int getPositionX() {
+        return positionX;
+    }
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
+    }
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
 }
