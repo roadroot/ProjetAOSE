@@ -16,11 +16,11 @@
             "consumption": [
                 {
                     "amount": 100,
-                    "energy type": "renewable"
+                    "type": "renewable"
                 },
                 {
                     "amount": 50,
-                    "energy type": "other"
+                    "type": "other"
                 }
             ],
             "positionX": 0,
@@ -32,12 +32,12 @@
             "production": [
                 {
                     "amount": 100,
-                    "energy type": "renewable",
+                    "type": "renewable",
                     "price": 2
                 },
                 {
                     "amount": 100,
-                    "energy type": "other",
+                    "type": "other",
                     "price": 1
                 }
             ],
@@ -50,23 +50,23 @@
             "production": [
                 {
                     "amount": 100,
-                    "energy type": "renewable",
+                    "type": "renewable",
                     "price": 2
                 },
                 {
                     "amount": 100,
-                    "energy type": "other",
+                    "type": "other",
                     "price": 1
                 }
             ],
             "consumption": [
                 {
                     "amount": 100,
-                    "energy type": "renewable"
+                    "type": "renewable"
                 },
                 {
                     "amount": 50,
-                    "energy type": "other"
+                    "type": "other"
                 }
             ],
             "positionX": 0,

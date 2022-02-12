@@ -1,12 +1,12 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import flexjson.JSONDeserializer;
 import jade.core.Agent;
-import jade.wrapper.AgentContainer;
 
 public class Configuration {
     private static final String GITHUB = "https://github.com/roadroot/ProjetAOSE";
@@ -52,7 +52,8 @@ public class Configuration {
         return titleHeight;
     }
     @SuppressWarnings("unchecked")
-    public Configuration(String path, AgentContainer mc) throws Exception {
+    public Configuration(String path) throws Exception {
+        int brokers = 0;
         try {
             Map<String, Object> json = new JSONDeserializer<Map<String, Object>>().deserialize(Files.readAllLines(Paths.get(path)).stream().reduce("", (l1, l2)->l1+"\n"+l2));
             json.get(WORLD);
@@ -66,6 +67,7 @@ public class Configuration {
             for(Map<String, Object> agentJ : agentJson) {
                 if((int) agentJ.get(AGENT_TYPE) == 0) {
                     agents.put((String) agentJ.get(AGENT_NAME), new BrokerAgent());
+                    brokers ++;
                 }
                 else if((int) agentJ.get(AGENT_TYPE) == 1) {
                     ConsumerAgent ag = new ConsumerAgent();
@@ -93,10 +95,48 @@ public class Configuration {
                     agents.put((String) agentJ.get(AGENT_NAME), ag);
                 }
             }
+            if(brokers != 1)
+                throw new Exception("Configuration contains not not one broker agent in \"" + path + "\" please visit " + GITHUB + " for more information");
         } catch(ClassCastException e) {
-            throw new Exception("Configuration does not contains all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
+            throw new Exception("Configuration does not contain all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
         } catch(NullPointerException e) {
-            throw new Exception("Configuration does not contains all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
+            throw new Exception("Configuration does not contain all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
         }
+    }
+
+    Map.Entry<String, BrokerAgent> getBrokerAgent() {
+        for(Map.Entry<String, Agent> agent : agents.entrySet()) {
+            if(agent.getValue() instanceof BrokerAgent)
+                return new AbstractMap.SimpleEntry<String, BrokerAgent>(agent.getKey(), (BrokerAgent) agent.getValue());;
+        }
+        return null;
+    }
+
+    Map<String, ConsumerAgent> getConsumerAgents() {
+        HashMap<String, ConsumerAgent> consumers = new HashMap<>();
+        for(String agentName : agents.keySet()) {
+            if(agents.get(agentName) instanceof ConsumerAgent)
+                consumers.put(agentName, (ConsumerAgent) agents.get(agentName));
+        }
+        return consumers;
+    }
+
+    Map<String, ProducerAgent> getProducerAgents() {
+        HashMap<String, ProducerAgent> producers = new HashMap<>();
+        for(String agentName : agents.keySet()) {
+            if(agents.get(agentName) instanceof ProducerAgent)
+                producers.put(agentName, (ProducerAgent) agents.get(agentName));
+        }
+        return producers;
+    }
+
+
+    Map<String, ProsumerAgent> getProsumerAgents() {
+        HashMap<String, ProsumerAgent> prosumers = new HashMap<>();
+        for(String agentName : agents.keySet()) {
+            if(agents.get(agentName) instanceof ProsumerAgent)
+                prosumers.put(agentName, (ProsumerAgent) agents.get(agentName));
+        }
+        return prosumers;
     }
 }
