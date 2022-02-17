@@ -22,7 +22,11 @@ public class ProducerAgent extends Agent {
 
         FSMBehaviour behaviour = new FSMBehaviour(this);
         behaviour.registerFirstState(new InitializationState(this), InitializationState.NAME);
-        behaviour.registerLastState(new InitializationState(this), InitializationState.NAME);
+        behaviour.registerState(new SendPriceTableState(this), SendPriceTableState.NAME);
+        behaviour.registerDefaultTransition(InitializationState.NAME, InitializationState.NAME);
+        behaviour.registerTransition(InitializationState.NAME, SendPriceTableState.NAME, InitializationState.DECISION_SEND_TABLE);
+        behaviour.registerDefaultTransition(SendPriceTableState.NAME, InitializationState.NAME);
+        behaviour.registerLastState(new FinalState(), FinalState.NAME);
         addBehaviour(behaviour);
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }

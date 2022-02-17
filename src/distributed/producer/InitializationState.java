@@ -1,28 +1,22 @@
 package distributed.producer;
 
-import java.io.IOException;
-
-import jade.core.AID;
+import distributed.StringConstants;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-import main.Energy;
-import main.GraphicHelper;
 
 public class InitializationState extends OneShotBehaviour {
+    public static final int DECISION_NONE = 0;
+    public static final int DECISION_SEND_TABLE = 1;
     public static final String NAME = "init";
-    private int decision = 0;
+    private int decision = DECISION_NONE;
     private ProducerAgent producer;
     @Override
     public void action() {
-        for(Energy energy : producer.getProduction()) {
-            ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-            try {
-                message.setContentObject(energy);
-                message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.producer.send(message);
+        producer.doWait();
+        ACLMessage message = producer.receive();
+        System.out.println(message.getContent());
+        if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
+            decision = DECISION_SEND_TABLE;
         }
     }
 
