@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +8,7 @@ public abstract class GraphicHelper {
     public static Map<String, Position> positions = new HashMap<>();
     public static Map<String, Integer> agentTypes = new HashMap<>();
     public static Map<String, Boolean> agentStates = new HashMap<>();
-
+    public static Configuration configuration;
     public static String getBroker() {
         for(Map.Entry<String, Integer> entry : agentTypes.entrySet())
             if(entry.getValue() == 0) return entry.getKey();

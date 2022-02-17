@@ -1,3 +1,4 @@
+package main;
 import java.util.Arrays;
 public enum EnergyType {
     RENEWABLE("renewable"),

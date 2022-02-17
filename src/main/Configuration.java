@@ -1,9 +1,14 @@
+package main;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import distributed.ProsumerAgent;
+import distributed.broker.BrokerAgent;
+import distributed.consumer.ConsumerAgent;
+import distributed.producer.ProducerAgent;
 import flexjson.JSONDeserializer;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
@@ -53,6 +58,7 @@ public class Configuration {
     }
     @SuppressWarnings("unchecked")
     public Configuration(String path, AgentContainer mc) throws Exception {
+        GraphicHelper.configuration = this;
         int brokers = 0;
         try {
             Map<String, Object> json = new JSONDeserializer<Map<String, Object>>().deserialize(Files.readAllLines(Paths.get(path)).stream().reduce("", (l1, l2)->l1+"\n"+l2));

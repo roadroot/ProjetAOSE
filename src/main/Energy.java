@@ -1,7 +1,10 @@
-public class Energy {
-    private int amount;
-    private int price;
-    private EnergyType type;
+package main;
+import java.io.Serializable;
+
+public class Energy implements Serializable{
+    public int amount;
+    public int price;
+    public EnergyType type;
     public Energy(int amount, EnergyType type, int price) {
         this.setAmount(amount);
         this.setPrice(price);
