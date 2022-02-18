@@ -26,7 +26,6 @@ public class SendPriceTableState extends OneShotBehaviour {
         try {
             message.setContentObject(energies);
             message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
-            System.out.println(agent.getAID().getLocalName() + " sends to " + message.getAllReceiver().next()+ " " + message.getContent());
             Thread.sleep((long)(Math.random() * 1000));
             this.agent.send(message);
         } catch (IOException | InterruptedException e) {

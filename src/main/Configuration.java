@@ -98,7 +98,7 @@ public class Configuration {
                     ArrayList<Energy> energies = new ArrayList<>();
                     args[1] = energies;
                     for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_PRODUCTION))
-                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE))));
+                        energies.add(new Energy(EnergyType.get((String) energy.get(ENERGY_TYPE)), (int) energy.get(ENERGY_PRICE)));
                     AgentController ac = mc.createNewAgent(agentName, ProducerAgent.class.getName(), args);
                     agents.put(agentName, ac);
                 }
@@ -111,10 +111,10 @@ public class Configuration {
                     args[1] = energies;
                     ArrayList<Energy> pEnergies = new ArrayList<>();
                     args[2] = pEnergies;
-                    for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_PRODUCTION))
-                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE)), (int) energy.get(ENERGY_PRICE)));
                     for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_CONSUMPTION))
-                        pEnergies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE))));
+                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE))));
+                    for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_PRODUCTION))
+                        pEnergies.add(new Energy(EnergyType.get((String) energy.get(ENERGY_TYPE)), (int) energy.get(ENERGY_PRICE)));
                     AgentController ac = mc.createNewAgent(agentName, ProsumerAgent.class.getName(), args);
                     agents.put(agentName, ac);
                 }

@@ -10,6 +10,11 @@ public class Energy implements Serializable{
         this.setPrice(price);
         this.setType(type);
     }
+    public Energy(EnergyType type, int price) {
+        this.setAmount(-1);
+        this.setPrice(price);
+        this.setType(type);
+    }
     public EnergyType getType() {
         return type;
     }
@@ -32,5 +37,9 @@ public class Energy implements Serializable{
         this.setAmount(amount);
         this.setPrice(-1);
         this.setType(type);
+    }
+    @Override
+    public String toString() {
+        return "Energy [amount=" + amount + ", price=" + price + ", type=" + type + "]";
     }
 }

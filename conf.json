@@ -31,12 +31,10 @@
             "type": 2,
             "production": [
                 {
-                    "amount": 100,
                     "type": "renewable",
                     "price": 2
                 },
                 {
-                    "amount": 100,
                     "type": "other",
                     "price": 1
                 }
@@ -49,12 +47,10 @@
             "type": 2,
             "production": [
                 {
-                    "amount": 100,
                     "type": "renewable",
                     "price": 2
                 },
                 {
-                    "amount": 100,
                     "type": "other",
                     "price": 1
                 }
@@ -67,12 +63,10 @@
             "type": 3,
             "production": [
                 {
-                    "amount": 100,
                     "type": "renewable",
                     "price": 2
                 },
                 {
-                    "amount": 100,
                     "type": "other",
                     "price": 1
                 }
