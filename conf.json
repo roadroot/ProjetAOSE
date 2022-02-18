@@ -45,6 +45,24 @@
             "positionY": 4
         },
         {
+            "name": "producer 2",
+            "type": 2,
+            "production": [
+                {
+                    "amount": 100,
+                    "type": "renewable",
+                    "price": 2
+                },
+                {
+                    "amount": 100,
+                    "type": "other",
+                    "price": 1
+                }
+            ],
+            "positionX": 3,
+            "positionY": 3
+        },
+        {
             "name": "prosumer 1",
             "type": 3,
             "production": [

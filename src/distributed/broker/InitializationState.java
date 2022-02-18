@@ -1,5 +1,7 @@
 package distributed.broker;
 
+import java.util.HashMap;
+
 import distributed.StringConstants;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
@@ -16,13 +18,15 @@ public class InitializationState extends OneShotBehaviour {
     public void action() {
         broker.doWait();
         ACLMessage message = broker.receive();
-        System.out.println(message.getContent());
+        System.out.println(broker.getAID().getLocalName() + " " + message.getContent());
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
+            broker.tableRequest = message.getSender();
             ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
             requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
             for(String agent : GraphicHelper.getProducers())
                 requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
             broker.send(requestMessage);
+            broker.table = new HashMap<>();
             decision = GET_TABLES;
         }
         // try {

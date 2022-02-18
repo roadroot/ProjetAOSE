@@ -19,17 +19,19 @@ public class SendPriceTableState extends OneShotBehaviour {
     public void action() {
         ArrayList<Energy> energies=null;
         if(agent instanceof ProducerAgent)
-            energies = ((ProducerAgent) agent).getProduction();
+        energies = ((ProducerAgent) agent).getProduction();
         else if(agent instanceof ProducerAgent)
-            energies = ((ProsumerAgent) agent).getProduction();
+        energies = ((ProsumerAgent) agent).getProduction();
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
             message.setContentObject(energies);
             message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
-        } catch (IOException e) {
+            System.out.println(agent.getAID().getLocalName() + " sends to " + message.getAllReceiver().next()+ " " + message.getContent());
+            Thread.sleep((long)(Math.random() * 1000));
+            this.agent.send(message);
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        this.agent.send(message);
     }
 
     public SendPriceTableState(ProducerAgent producer) {

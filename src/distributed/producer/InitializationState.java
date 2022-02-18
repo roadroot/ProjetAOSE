@@ -14,7 +14,7 @@ public class InitializationState extends OneShotBehaviour {
     public void action() {
         producer.doWait();
         ACLMessage message = producer.receive();
-        System.out.println(message.getContent());
+        System.out.println(producer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             decision = DECISION_SEND_TABLE;
         }
