@@ -27,6 +27,7 @@ public class App {
             for(int j =0; j<conf.getHeight(); j++) {
                 // g.addLayoutComponent(name, comp);
                 buttons[i][j] = new JButton();
+                buttons[i][j].setEnabled(false);
                 buttons[i][j].setSize(conf.getTileWidth(), conf.getTileHeight());
                 f.add(buttons[i][j]);
             }
@@ -34,16 +35,19 @@ public class App {
         conf.getAgents().get(GraphicHelper.getBroker()).start();
 
         for(String agent : GraphicHelper.getProducers()) {
-            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/tile004.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/producer.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setEnabled(true);
             conf.getAgents().get(agent).start();
         }
         for(String agent : GraphicHelper.getProsumers()) {
-            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/tile004.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/prosumer.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setEnabled(true);
             conf.getAgents().get(agent).start();
 
         }
         for(String agent : GraphicHelper.getConsumers()) {
-            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/tile004.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/consumer.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setEnabled(true);
             conf.getAgents().get(agent).start();
         }
         f.setSize(conf.getSquareWidth(), conf.getSquareHeight());
