@@ -3,9 +3,7 @@ package distributed.producer;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import distributed.ProsumerAgent;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import main.Energy;
@@ -14,27 +12,23 @@ import main.GraphicHelper;
 public class SendPriceTableState extends OneShotBehaviour {
     public static final String NAME = "send_price_table";
     private int decision = 0;
-    private Agent agent;
+    private ProducerAgent producer;
     @Override
     public void action() {
-        ArrayList<Energy> energies=null;
-        if(agent instanceof ProducerAgent)
-        energies = ((ProducerAgent) agent).getProduction();
-        else if(agent instanceof ProducerAgent)
-        energies = ((ProsumerAgent) agent).getProduction();
+        ArrayList<Energy> energies= producer.getProduction();
         ACLMessage message = new ACLMessage(ACLMessage.INFORM);
         try {
             message.setContentObject(energies);
             message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
             Thread.sleep((long)(Math.random() * 1000));
-            this.agent.send(message);
+            this.producer.send(message);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     public SendPriceTableState(ProducerAgent producer) {
-        this.agent = producer;
+        this.producer = producer;
     }
 
     @Override

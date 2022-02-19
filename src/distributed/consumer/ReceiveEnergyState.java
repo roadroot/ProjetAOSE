@@ -1,9 +1,9 @@
 package distributed.consumer;
 
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ReceiveEnergyState extends OneShotBehaviour {
+public class ReceiveEnergyState extends CyclicBehaviour {
     public static final String NAME = "receive_energy_state";
     public static final int NONE = 0;
     private int decision = NONE;

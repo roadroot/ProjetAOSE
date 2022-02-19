@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.FSMBehaviour;
+import jade.core.behaviours.SequentialBehaviour;
 import main.Energy;
 import main.Position;
 
@@ -34,19 +36,19 @@ public class ConsumerAgent extends Agent {
             offers.put(i, null);
         }
 
-        FSMBehaviour behaviour = new FSMBehaviour(this);
+        // FSMBehaviour behaviour = new FSMBehaviour(this);
+        SequentialBehaviour behaviour = new SequentialBehaviour(this);
         addBehaviour(behaviour);
-        behaviour.registerFirstState(new InitializationState(this), InitializationState.NAME);
-        behaviour.registerState(new RequestPriceTable(this), RequestPriceTable.NAME);
-        behaviour.registerState(new GetPriceTableState(this), GetPriceTableState.NAME);
-        behaviour.registerState(new RequestEnergyState(this), RequestEnergyState.NAME);
-        behaviour.registerState(new ReceiveEnergyState(this), ReceiveEnergyState.NAME);
-        behaviour.registerLastState(new FinalState(), FinalState.NAME);
-        behaviour.registerTransition(InitializationState.NAME, RequestPriceTable.NAME, InitializationState.GET_PRICE_TABLE);
-        behaviour.registerDefaultTransition(RequestPriceTable.NAME, GetPriceTableState.NAME);
-        behaviour.registerDefaultTransition(GetPriceTableState.NAME, RequestEnergyState.NAME);
-        behaviour.registerDefaultTransition(RequestEnergyState.NAME, ReceiveEnergyState.NAME);
-        behaviour.registerDefaultTransition(ReceiveEnergyState.NAME, ReceiveEnergyState.NAME);
+        // behaviour.registerFirstState(new InitializationState(this), InitializationState.NAME);
+        // behaviour.registerState(new SequentialBehaviour(this), ReceiveEnergyState.NAME);
+        // behaviour.registerLastState(new FinalState(), FinalState.NAME);
+        behaviour.addSubBehaviour(new InitializationState(this));
+        SequentialBehaviour subscribeToEnergy = new SequentialBehaviour(this);
+        behaviour.addSubBehaviour(subscribeToEnergy);
+        subscribeToEnergy.addSubBehaviour(new RequestPriceTableState(this));
+        subscribeToEnergy.addSubBehaviour(new GetPriceTableState(this));
+        subscribeToEnergy.addSubBehaviour(new RequestEnergyState(this));
+        subscribeToEnergy.addSubBehaviour(new ReceiveEnergyState(this));
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {

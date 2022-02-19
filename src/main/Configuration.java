@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import distributed.ProsumerAgent;
 import distributed.broker.BrokerAgent;
 import distributed.consumer.ConsumerAgent;
 import distributed.producer.ProducerAgent;
+import distributed.prosumer.ProsumerAgent;
 import flexjson.JSONDeserializer;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;

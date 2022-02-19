@@ -6,12 +6,13 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import main.GraphicHelper;
 
-public class RequestPriceTable extends OneShotBehaviour {
+public class RequestPriceTableState extends OneShotBehaviour {
     public static final String NAME = "request_price_table";
     public static final int NONE = 0;
     public static final int GET_PROVIDER = 1;
     private int decision = NONE;
     private ConsumerAgent consumer;
+
     @Override
     public void action() {
         ACLMessage message = new ACLMessage(ACLMessage.REQUEST);
@@ -20,7 +21,7 @@ public class RequestPriceTable extends OneShotBehaviour {
         consumer.send(message);
     }
 
-    public RequestPriceTable(ConsumerAgent consumer) {
+    public RequestPriceTableState(ConsumerAgent consumer) {
         this.consumer = consumer;
     }
 
