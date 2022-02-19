@@ -18,12 +18,14 @@ public class InitializationState extends OneShotBehaviour {
     public void action() {
         broker.doWait();
         ACLMessage message = broker.receive();
-        System.out.println(broker.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
+        System.out.println(broker.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + " InitialeState " + message.getContent());
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             broker.tableRequest = message.getSender();
             ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
             requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
             for(String agent : GraphicHelper.getProducers())
+                requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
+            for(String agent : GraphicHelper.getProsumers())
                 requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
             broker.send(requestMessage);
             broker.table = new HashMap<>();

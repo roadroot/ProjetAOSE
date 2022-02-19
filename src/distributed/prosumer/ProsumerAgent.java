@@ -2,14 +2,15 @@ package distributed.prosumer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import distributed.StringConstants;
 import main.Position;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.ParallelBehaviour;
+import jade.core.behaviours.SequentialBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -17,9 +18,17 @@ import main.Energy;
 import main.GraphicHelper;
 
 public class ProsumerAgent extends Agent{
+    private HashMap<Integer, String> providers = new HashMap<>();
+    private HashMap<Integer, Energy> offers = new HashMap<>();
     private ArrayList<Energy> production = new ArrayList<>();
     private ArrayList<Energy> consumption = new ArrayList<>();
     private Position position;
+    public HashMap<Integer, Energy> getOffers() {
+        return offers;
+    }
+    public HashMap<Integer, String> getProviders() {
+        return providers;
+    }
     public Position getPosition() {
         return position;
     }
@@ -30,8 +39,9 @@ public class ProsumerAgent extends Agent{
         position = (Position) args[0];
         consumption = (ArrayList<Energy>) args[1];
         production = (ArrayList<Energy>) args[2];
-        FSMBehaviour behaviour = new FSMBehaviour(this);
+        // FSMBehaviour behaviour = new FSMBehaviour(this);
         ParallelBehaviour pb = new ParallelBehaviour(ParallelBehaviour.WHEN_ALL);
+        addBehaviour(pb);
         // add producer behaviour
         pb.addSubBehaviour(new CyclicBehaviour(this) {
             @Override
@@ -75,6 +85,15 @@ public class ProsumerAgent extends Agent{
                 }
             }
         });
+        SequentialBehaviour consumerBehaviour = new SequentialBehaviour(this);
+        consumerBehaviour.addSubBehaviour(new InitializationState(this));
+        SequentialBehaviour subscribeToEnergy = new SequentialBehaviour(this);
+        consumerBehaviour.addSubBehaviour(subscribeToEnergy);
+        subscribeToEnergy.addSubBehaviour(new RequestPriceTableState(this));
+        subscribeToEnergy.addSubBehaviour(new GetPriceTableState(this));
+        subscribeToEnergy.addSubBehaviour(new RequestEnergyState(this));
+        subscribeToEnergy.addSubBehaviour(new ReceiveEnergyState(this));
+        pb.addSubBehaviour(consumerBehaviour);
         // pb.addSubBehaviour(b);
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }

@@ -1,4 +1,4 @@
-package distributed.consumer;
+package distributed.prosumer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,28 +13,28 @@ public class GetPriceTableState extends OneShotBehaviour {
     public static final String NAME = "get_price_table";
     public static final int NONE = 0;
     private int decision = NONE;
-    private ConsumerAgent consumer;
+    private ProsumerAgent prosumer;
     @Override
     @SuppressWarnings("unchecked")
     public void action() {
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-        ACLMessage message = consumer.blockingReceive(mt);
+        ACLMessage message = prosumer.blockingReceive(mt);
         if(message.getPerformative() == ACLMessage.INFORM) {
             try {
-                System.out.println(consumer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
-                consumer.table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
-                for(int i =0; i<consumer.getConsumption().size(); i++) {
+                System.out.println(prosumer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
+                HashMap<String, ArrayList<Energy>> table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
+                for(int i =0; i<prosumer.getConsumption().size(); i++) {
                     String bestOfferer = "";
                     Energy bestOffer = null;
-                    for(String offerer: consumer.table.keySet())
-                        for(Energy offer : consumer.table.get(offerer))
-                            if(offer.type == consumer.getConsumption().get(i).type && (bestOffer == null||offer.price<bestOffer.price)) {
+                    for(String offerer: table.keySet())
+                        for(Energy offer : table.get(offerer))
+                            if(offer.type == prosumer.getConsumption().get(i).type && (bestOffer == null||offer.price<bestOffer.price)) {
                                 bestOfferer = offerer;
                                 bestOffer = offer;
                             }
                     if(bestOffer != null) {
-                        consumer.getProviders().replace(i, bestOfferer);
-                        consumer.getOffers().replace(i, bestOffer);
+                        prosumer.getProviders().replace(i, bestOfferer);
+                        prosumer.getOffers().replace(i, bestOffer);
                     }
                 }
             } catch (UnreadableException e) {
@@ -43,8 +43,8 @@ public class GetPriceTableState extends OneShotBehaviour {
         }
     }
 
-    public GetPriceTableState(ConsumerAgent consumer) {
-        this.consumer = consumer;
+    public GetPriceTableState(ProsumerAgent consumer) {
+        this.prosumer = consumer;
     }
 
     @Override

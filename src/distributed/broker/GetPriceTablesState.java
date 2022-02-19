@@ -26,7 +26,7 @@ public class GetPriceTablesState extends OneShotBehaviour {
         try {
             System.out.println(broker.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
             broker.table.put(message.getSender().getLocalName(), (ArrayList<Energy>) message.getContentObject());
-            if(broker.table.keySet().size() == GraphicHelper.getProducers().size())
+            if(broker.table.keySet().size() == GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size())
                 decision = SEND_TABLE;
             else
                 decision = GET_OTHER;

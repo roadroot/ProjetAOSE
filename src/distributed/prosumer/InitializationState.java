@@ -1,4 +1,4 @@
-package distributed.consumer;
+package distributed.prosumer;
 
 import jade.core.behaviours.OneShotBehaviour;
 
@@ -7,24 +7,24 @@ public class InitializationState extends OneShotBehaviour {
     public static final int NONE = 0;
     public static final int GET_PRICE_TABLE = 1;
     private int decision = NONE;
-    // private ConsumerAgent consumer;
+    // private ConsumerAgent prosumer;
     @Override
     public void action() {
         // boolean satisfied = true;
-        // for(String agent :consumer.getProviders().values())
+        // for(String agent :prosumer.getProviders().values())
         //     if(agent == null) {
         //         satisfied = false;
         //         break;
         //     }
         // if(satisfied) {
-        //     consumer.doWait();
-        //     System.out.println(consumer.receive().getContent());
+        //     prosumer.doWait();
+        //     System.out.println(prosumer.receive().getContent());
         // } else
         //     decision = GET_PRICE_TABLE;
     }
 
-    public InitializationState(ConsumerAgent consumer) {
-        // this.consumer = consumer;
+    public InitializationState(ProsumerAgent prosumer) {
+        // this.prosumer = prosumer;
     }
 
     @Override
