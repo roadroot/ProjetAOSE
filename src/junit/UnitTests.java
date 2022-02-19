@@ -26,7 +26,11 @@ public class UnitTests {
       int expectedNbAgents = EXPECTED_NB_BROKER + EXPECTED_NB_CONSUMERS + EXPECTED_NB_PRODUCERS + EXPECTED_NB_PROSUMERS ;
       assertEquals(conf.getAgents().size() , expectedNbAgents) ;
     
-      assertNotNull(GraphicHelper.getBroker()) ;
+      if(EXPECTED_NB_BROKER==0)
+        assertNull(GraphicHelper.getBroker()) ;
+      else
+        assertNotNull(GraphicHelper.getBroker()) ;
+    
       assertEquals(GraphicHelper.getConsumers().size() , EXPECTED_NB_CONSUMERS) ;
       assertEquals(GraphicHelper.getProducers().size() , EXPECTED_NB_PRODUCERS) ;
       assertEquals(GraphicHelper.getProsumers().size() , EXPECTED_NB_PROSUMERS) ;
