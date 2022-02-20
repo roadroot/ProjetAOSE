@@ -41,7 +41,7 @@ public class ProsumerAgent extends Agent{
         production = (ArrayList<Energy>) args[2];
         // FSMBehaviour behaviour = new FSMBehaviour(this);
         ParallelBehaviour pb = new ParallelBehaviour(ParallelBehaviour.WHEN_ALL);
-        addBehaviour(pb);
+        //addBehaviour(pb);
         // add producer behaviour
         pb.addSubBehaviour(new CyclicBehaviour(this) {
             @Override
@@ -85,16 +85,25 @@ public class ProsumerAgent extends Agent{
                 }
             }
         });
+
+        // add consumer behaviour
         SequentialBehaviour consumerBehaviour = new SequentialBehaviour(this);
-        consumerBehaviour.addSubBehaviour(new InitializationState(this));
-        SequentialBehaviour subscribeToEnergy = new SequentialBehaviour(this);
-        consumerBehaviour.addSubBehaviour(subscribeToEnergy);
-        subscribeToEnergy.addSubBehaviour(new RequestPriceTableState(this));
-        subscribeToEnergy.addSubBehaviour(new GetPriceTableState(this));
-        subscribeToEnergy.addSubBehaviour(new RequestEnergyState(this));
-        subscribeToEnergy.addSubBehaviour(new ReceiveEnergyState(this));
+        consumerBehaviour.addSubBehaviour(new RequestPriceTableState(this));
+        consumerBehaviour.addSubBehaviour(new GetPriceTableState(this));
+        consumerBehaviour.addSubBehaviour(new RequestEnergyState(this));
+        consumerBehaviour.addSubBehaviour(new ReceiveEnergyState(this));
         pb.addSubBehaviour(consumerBehaviour);
-        // pb.addSubBehaviour(b);
+
+        // FSMBehaviour fconsBehaviour = new FSMBehaviour();
+        // fconsBehaviour.registerFirstState(new RequestPriceTableState(this), RequestPriceTableState.NAME);
+        // fconsBehaviour.registerState(new GetPriceTableState(this), GetPriceTableState.NAME);
+        // fconsBehaviour.registerState(new RequestEnergyState(this), RequestEnergyState.NAME);
+        // fconsBehaviour.registerState(new ReceiveEnergyState(this), ReceiveEnergyState.NAME);
+        // fconsBehaviour.registerDefaultTransition(RequestPriceTableState.NAME, GetPriceTableState.NAME);
+        // fconsBehaviour.registerDefaultTransition(GetPriceTableState.NAME, RequestEnergyState.NAME);
+        // fconsBehaviour.registerDefaultTransition(RequestEnergyState.NAME, ReceiveEnergyState.NAME);
+        // pb.addSubBehaviour(fconsBehaviour);
+        addBehaviour(pb);
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {

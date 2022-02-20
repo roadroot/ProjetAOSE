@@ -13,8 +13,8 @@ import jade.wrapper.AgentContainer;
 public class App {
     public static void main(String[] args) throws Exception {
         jade.core.Runtime runtime = jade.core.Runtime.instance();
-        Profile config = new ProfileImpl("localhost", 8888, null);
-        config.setParameter("gui", "true");
+        Profile config = new ProfileImpl("localhost", 8755, null);
+        config.setParameter("gui", "false");
         AgentContainer mc = runtime.createMainContainer(config);
         Configuration conf = new Configuration("conf.json", mc);
 
@@ -31,7 +31,6 @@ public class App {
                 buttons[i][j].setSize(conf.getTileWidth(), conf.getTileHeight());
                 f.add(buttons[i][j]);
             }
-
         conf.getAgents().get(GraphicHelper.getBroker()).start();
 
         for(String agent : GraphicHelper.getProducers()) {

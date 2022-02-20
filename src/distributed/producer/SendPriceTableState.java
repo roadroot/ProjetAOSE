@@ -20,9 +20,8 @@ public class SendPriceTableState extends OneShotBehaviour {
         try {
             message.setContentObject(energies);
             message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
-            Thread.sleep((long)(Math.random() * 1000));
             this.producer.send(message);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

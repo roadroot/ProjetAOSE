@@ -1,26 +1,34 @@
 package distributed.producer;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import distributed.StringConstants;
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.AID;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import main.Energy;
+import main.GraphicHelper;
 
-public class InitializationState extends OneShotBehaviour {
-    public static final int DECISION_NONE = 0;
-    public static final int DECISION_SEND_TABLE = 1;
-    public static final int DECISION_SEND_ENERGY = 2;
+public class InitializationState extends CyclicBehaviour {
     public static final String NAME = "init";
-    private int decision = DECISION_NONE;
     private ProducerAgent producer;
     @Override
     public void action() {
-        producer.doWait();
-        ACLMessage message = producer.receive();
+        ACLMessage message = producer.blockingReceive();
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             System.out.println(producer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
-            decision = DECISION_SEND_TABLE;
-        }
+            ArrayList<Energy> energies= producer.getProduction();
+            ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
+            try {
+                reply.setContentObject(energies);
+                reply.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
+                this.producer.send(reply);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else
         if(message.getPerformative() == ACLMessage.PROPOSE) {
             try {
                 System.out.println(producer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
@@ -41,15 +49,14 @@ public class InitializationState extends OneShotBehaviour {
             } catch (UnreadableException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.err.println(".?.??..??.?.?.??.............???????????.?.................?..........?.?.?.?");
+            System.out.println(producer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
+            System.err.println(".?.??..??.?.?.??.............???????????.?.................?..........?.?.?.?");
         }
     }
 
     public InitializationState(ProducerAgent producer) {
         this.producer = producer;
-    }
-
-    @Override
-    public int onEnd() {
-        return decision;
     }
 }

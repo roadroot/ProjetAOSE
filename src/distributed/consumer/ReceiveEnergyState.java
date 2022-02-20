@@ -2,6 +2,7 @@ package distributed.consumer;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public class ReceiveEnergyState extends CyclicBehaviour {
     public static final String NAME = "receive_energy_state";
@@ -10,7 +11,8 @@ public class ReceiveEnergyState extends CyclicBehaviour {
     private ConsumerAgent consumer;
     @Override
     public void action() {
-        ACLMessage message = consumer.blockingReceive(ACLMessage.ACCEPT_PROPOSAL);
+        MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
+        ACLMessage message = consumer.blockingReceive(mt);
         System.out.println(consumer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
     }
 

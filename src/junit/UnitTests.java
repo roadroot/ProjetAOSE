@@ -17,7 +17,8 @@ public class UnitTests {
   
   @Before
   public void initialize() {
-      conf = new Configuration(FILE_CONF) ; 
+    // TODO add agent container
+      // conf = new Configuration(FILE_CONF) ; 
   }
   
   

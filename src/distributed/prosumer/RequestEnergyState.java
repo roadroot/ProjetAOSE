@@ -9,11 +9,14 @@ import main.Energy;
 
 public class RequestEnergyState extends OneShotBehaviour {
     public static final String NAME = "request_energy_state";
-    public static final int NONE = 0;
-    private int decision = NONE;
     private ProsumerAgent prosumer;
     @Override
     public void action() {
+        System.out.println(45545);
+        System.out.println(45545);
+        System.out.println(45545);
+        System.out.println(45545);
+        System.out.println(45545);
         for(int i = 0; i<prosumer.getOffers().size(); i++) {
             if(prosumer.getOffers().get(i) == null || prosumer.getProviders().get(i) == null) continue;
             ACLMessage message = new ACLMessage(ACLMessage.PROPOSE);
@@ -23,6 +26,7 @@ public class RequestEnergyState extends OneShotBehaviour {
                 message.setContentObject(offer);
                 prosumer.send(message);
             } catch (IOException e) {
+                System.out.println("Error received from " + this.getClass().getName());
                 e.printStackTrace();
             }
         }
@@ -30,10 +34,5 @@ public class RequestEnergyState extends OneShotBehaviour {
 
     public RequestEnergyState(ProsumerAgent consumer) {
         this.prosumer = consumer;
-    }
-
-    @Override
-    public int onEnd() {
-        return decision;
     }
 }

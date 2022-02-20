@@ -8,13 +8,11 @@ import main.GraphicHelper;
 
 public class RequestPriceTableState extends OneShotBehaviour {
     public static final String NAME = "request_price_table";
-    public static final int NONE = 0;
-    public static final int GET_PROVIDER = 1;
-    private int decision = NONE;
     private ProsumerAgent prosumer;
 
     @Override
     public void action() {
+        System.out.println("0000000000000000000000000000000");
         ACLMessage message = new ACLMessage(ACLMessage.REQUEST);
         message.setContent(StringConstants.GET_PRICE_TABLE);
         message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
@@ -23,10 +21,5 @@ public class RequestPriceTableState extends OneShotBehaviour {
 
     public RequestPriceTableState(ProsumerAgent consumer) {
         this.prosumer = consumer;
-    }
-
-    @Override
-    public int onEnd() {
-        return decision;
     }
 }

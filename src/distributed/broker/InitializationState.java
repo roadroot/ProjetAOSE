@@ -16,18 +16,22 @@ public class InitializationState extends OneShotBehaviour {
     private BrokerAgent broker;
     @Override
     public void action() {
-        broker.doWait();
-        ACLMessage message = broker.receive();
+        ACLMessage message = broker.blockingReceive();
         System.out.println(broker.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + " InitialeState " + message.getContent());
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             broker.tableRequest = message.getSender();
-            ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
-            requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
-            for(String agent : GraphicHelper.getProducers())
+            for(String agent : GraphicHelper.getProducers()) {
+                ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
                 requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
-            for(String agent : GraphicHelper.getProsumers())
+                requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
+                broker.send(requestMessage);
+            }
+            for(String agent : GraphicHelper.getProsumers()) {
+                ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
                 requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
-            broker.send(requestMessage);
+                requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
+                broker.send(requestMessage);
+            }
             broker.table = new HashMap<>();
             decision = GET_TABLES;
         }

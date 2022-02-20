@@ -11,18 +11,19 @@ import main.Energy;
 
 public class GetPriceTableState extends OneShotBehaviour {
     public static final String NAME = "get_price_table";
-    public static final int NONE = 0;
-    private int decision = NONE;
     private ProsumerAgent prosumer;
     @Override
     @SuppressWarnings("unchecked")
     public void action() {
+        System.out.println("Started");
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
         ACLMessage message = prosumer.blockingReceive(mt);
         if(message.getPerformative() == ACLMessage.INFORM) {
             try {
                 System.out.println(prosumer.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
                 HashMap<String, ArrayList<Energy>> table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
+                prosumer.getProviders().clear();
+                prosumer.getOffers().clear();
                 for(int i =0; i<prosumer.getConsumption().size(); i++) {
                     String bestOfferer = "";
                     Energy bestOffer = null;
@@ -33,22 +34,26 @@ public class GetPriceTableState extends OneShotBehaviour {
                                 bestOffer = offer;
                             }
                     if(bestOffer != null) {
-                        prosumer.getProviders().replace(i, bestOfferer);
-                        prosumer.getOffers().replace(i, bestOffer);
+                        prosumer.getProviders().put(i, bestOfferer);
+                        prosumer.getOffers().put(i, bestOffer);
                     }
                 }
             } catch (UnreadableException e) {
+                System.out.println("Error received from " + this.getClass().getName());
                 e.printStackTrace();
             }
         }
-    }
-
-    public GetPriceTableState(ProsumerAgent consumer) {
-        this.prosumer = consumer;
+        System.out.println("Ended");
     }
 
     @Override
     public int onEnd() {
-        return decision;
+        System.out.println("#############################################################");
+        return super.onEnd();
+    }
+
+
+    public GetPriceTableState(ProsumerAgent prosumer) {
+        this.prosumer = prosumer;
     }
 }
