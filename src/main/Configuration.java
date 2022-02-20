@@ -20,6 +20,7 @@ public class Configuration {
     private static final String ENERGY_TYPE = "type";
     private static final String ENERGY_AMOUNT = "amount";
     private static final String ENERGY_PRICE = "price";
+    private static final String ENERGY_DURATION = "duration";
     private static final String WORLD_WIDTH = "width";
     private static final String WORLD_HEIGHT = "height";
     private static final String WORLD_TILE_WIDTH = "tile width";
@@ -87,7 +88,7 @@ public class Configuration {
                     ArrayList<Energy> energies = new ArrayList<>();
                     args[1] = energies;
                     for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_CONSUMPTION))
-                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE))));
+                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE)), (int) energy.get(ENERGY_DURATION)));
                     AgentController ac = mc.createNewAgent(agentName, ConsumerAgent.class.getName(), args);
                     agents.put(agentName, ac);
                 } else if((int) agentJ.get(AGENT_TYPE) == 2) {
@@ -112,7 +113,7 @@ public class Configuration {
                     ArrayList<Energy> pEnergies = new ArrayList<>();
                     args[2] = pEnergies;
                     for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_CONSUMPTION))
-                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE))));
+                        energies.add(new Energy((int) energy.get(ENERGY_AMOUNT), EnergyType.get((String) energy.get(ENERGY_TYPE)), (int) energy.get(ENERGY_DURATION)));
                     for(Map<String, Object> energy : (ArrayList<Map<String, Object>>) agentJ.get(AGENT_PRODUCTION))
                         pEnergies.add(new Energy(EnergyType.get((String) energy.get(ENERGY_TYPE)), (int) energy.get(ENERGY_PRICE)));
                     AgentController ac = mc.createNewAgent(agentName, ProsumerAgent.class.getName(), args);
@@ -127,40 +128,4 @@ public class Configuration {
             throw new Exception("Configuration does not contain all required fields in \"" + path + "\" please visit " + GITHUB + " for more information");
         }
     }
-
-    // Map.Entry<String, BrokerAgent> getBrokerAgent() {
-    //     for(Map.Entry<String, Agent> agent : agents.entrySet()) {
-    //         if(agent.getValue() instanceof BrokerAgent)
-    //             return new AbstractMap.SimpleEntry<String, BrokerAgent>(agent.getKey(), (BrokerAgent) agent.getValue());;
-    //     }
-    //     return null;
-    // }
-
-    // Map<String, ConsumerAgent> getConsumerAgents() {
-    //     HashMap<String, ConsumerAgent> consumers = new HashMap<>();
-    //     for(String agentName : agents.keySet()) {
-    //         if(agents.get(agentName) instanceof ConsumerAgent)
-    //             consumers.put(agentName, (ConsumerAgent) agents.get(agentName));
-    //     }
-    //     return consumers;
-    // }
-
-    // Map<String, ProducerAgent> getProducerAgents() {
-    //     HashMap<String, ProducerAgent> producers = new HashMap<>();
-    //     for(String agentName : agents.keySet()) {
-    //         if(agents.get(agentName) instanceof ProducerAgent)
-    //             producers.put(agentName, (ProducerAgent) agents.get(agentName));
-    //     }
-    //     return producers;
-    // }
-
-
-    // Map<String, ProsumerAgent> getProsumerAgents() {
-    //     HashMap<String, ProsumerAgent> prosumers = new HashMap<>();
-    //     for(String agentName : agents.keySet()) {
-    //         if(agents.get(agentName) instanceof ProsumerAgent)
-    //             prosumers.put(agentName, (ProsumerAgent) agents.get(agentName));
-    //     }
-    //     return prosumers;
-    // }
 }

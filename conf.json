@@ -16,11 +16,13 @@
             "consumption": [
                 {
                     "amount": 100,
-                    "type": "renewable"
+                    "type": "renewable",
+                    "duration": 2
                 },
                 {
                     "amount": 50,
-                    "type": "other"
+                    "type": "other",
+                    "duration": 24
                 }
             ],
             "positionX": 0,
@@ -74,11 +76,13 @@
             "consumption": [
                 {
                     "amount": 100,
-                    "type": "renewable"
+                    "type": "renewable",
+                    "duration": 3
                 },
                 {
                     "amount": 50,
-                    "type": "other"
+                    "type": "other",
+                    "duration": 24
                 }
             ],
             "positionX": 0,
@@ -100,11 +104,13 @@
             "consumption": [
                 {
                     "amount": 100,
-                    "type": "renewable"
+                    "type": "renewable",
+                    "duration": 24
                 },
                 {
                     "amount": 50,
-                    "type": "other"
+                    "type": "other",
+                    "duration": 12
                 }
             ],
             "positionX": 0,

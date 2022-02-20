@@ -12,16 +12,11 @@ public class RequestEnergyState extends OneShotBehaviour {
     private ProsumerAgent prosumer;
     @Override
     public void action() {
-        System.out.println(45545);
-        System.out.println(45545);
-        System.out.println(45545);
-        System.out.println(45545);
-        System.out.println(45545);
         for(int i = 0; i<prosumer.getOffers().size(); i++) {
             if(prosumer.getOffers().get(i) == null || prosumer.getProviders().get(i) == null) continue;
             ACLMessage message = new ACLMessage(ACLMessage.PROPOSE);
             message.addReceiver(new AID(prosumer.getProviders().get(i), AID.ISLOCALNAME));
-            Energy offer = new Energy(prosumer.getConsumption().get(i).amount, prosumer.getConsumption().get(i).type, prosumer.getOffers().get(i).price);
+            Energy offer = new Energy(prosumer.getConsumption().get(i).amount, prosumer.getConsumption().get(i).type, prosumer.getOffers().get(i).price, prosumer.getConsumption().get(i).duration);
             try {
                 message.setContentObject(offer);
                 prosumer.send(message);

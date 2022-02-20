@@ -2,6 +2,11 @@ package junit;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.wrapper.AgentContainer;
+
 import java.util.Map;
 import main.* ;
 
@@ -16,9 +21,12 @@ public class UnitTests {
   private Configuration conf ;
   
   @Before
-  public void initialize() {
-    // TODO add agent container
-      // conf = new Configuration(FILE_CONF) ; 
+  public void initialize() throws Exception {
+    jade.core.Runtime runtime = jade.core.Runtime.instance();
+    Profile config = new ProfileImpl("localhost", 8755, null);
+    config.setParameter("gui", "false");
+    AgentContainer mc = runtime.createMainContainer(config);
+    conf = new Configuration(FILE_CONF, mc) ;
   }
   
   

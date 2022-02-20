@@ -90,7 +90,7 @@ public class ProsumerAgent extends Agent{
                     }
                 } else if(message.getPerformative() == ACLMessage.INFORM) {
                     try {
-                        System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
+                        System.out.println(getAID().getLocalName() + ": " + message.getSender().getLocalName() + " requested energy: " + message.getContentObject());
                         HashMap<String, ArrayList<Energy>> table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
                         getProviders().clear();
                         getOffers().clear();
@@ -112,7 +112,7 @@ public class ProsumerAgent extends Agent{
                             if(getOffers().get(i) == null || getProviders().get(i) == null) continue;
                             ACLMessage reply = new ACLMessage(ACLMessage.PROPOSE);
                             reply.addReceiver(new AID(getProviders().get(i), AID.ISLOCALNAME));
-                            Energy offer = new Energy(getConsumption().get(i).amount, getConsumption().get(i).type, getOffers().get(i).price);
+                            Energy offer = new Energy(getConsumption().get(i).amount, getConsumption().get(i).type, getOffers().get(i).price, getConsumption().get(i).duration);
                             reply.setContentObject(offer);
                             send(reply);
                         }
@@ -121,21 +121,11 @@ public class ProsumerAgent extends Agent{
                         e.printStackTrace();
                     }
                 } else
-                    System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
+                    System.out.println(getAID().getLocalName() + ": received energy from " + message.getSender().getLocalName() + " :" + message.getContent());
 
             }
         });
 
-        // FSMBehaviour fconsBehaviour = new FSMBehaviour();
-        // fconsBehaviour.registerFirstState(new RequestPriceTableState(this), RequestPriceTableState.NAME);
-        // fconsBehaviour.registerState(new GetPriceTableState(this), GetPriceTableState.NAME);
-        // fconsBehaviour.registerState(new RequestEnergyState(this), RequestEnergyState.NAME);
-        // fconsBehaviour.registerState(new ReceiveEnergyState(this), ReceiveEnergyState.NAME);
-        // fconsBehaviour.registerDefaultTransition(RequestPriceTableState.NAME, GetPriceTableState.NAME);
-        // fconsBehaviour.registerDefaultTransition(GetPriceTableState.NAME, RequestEnergyState.NAME);
-        // fconsBehaviour.registerDefaultTransition(RequestEnergyState.NAME, ReceiveEnergyState.NAME);
-        // pb.addSubBehaviour(fconsBehaviour);
-        // addBehaviour(pb);
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {

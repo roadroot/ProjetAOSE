@@ -18,7 +18,7 @@ public class RequestEnergyState extends OneShotBehaviour {
             if(consumer.getOffers().get(i) == null || consumer.getProviders().get(i) == null) continue;
             ACLMessage message = new ACLMessage(ACLMessage.PROPOSE);
             message.addReceiver(new AID(consumer.getProviders().get(i), AID.ISLOCALNAME));
-            Energy offer = new Energy(consumer.getConsumption().get(i).amount, consumer.getConsumption().get(i).type, consumer.getOffers().get(i).price);
+            Energy offer = new Energy(consumer.getConsumption().get(i).amount, consumer.getConsumption().get(i).type, consumer.getOffers().get(i).price, consumer.getOffers().get(i).duration);
             try {
                 message.setContentObject(offer);
                 consumer.send(message);
