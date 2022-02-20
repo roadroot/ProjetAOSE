@@ -7,7 +7,7 @@ import main.* ;
 
 public class UnitTests {
 
-  private static String FILE_CONF = "conf.json" ;
+  private static String FILE_CONF = "confTest.json" ;
   private static int EXPECTED_NB_BROKER = 1 ;
   private static int EXPECTED_NB_CONSUMERS = 1 ;
   private static int EXPECTED_NB_PRODUCERS = 2 ;
