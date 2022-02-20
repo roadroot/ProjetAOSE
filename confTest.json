@@ -1,0 +1,114 @@
+{
+    "world": {
+        "width": 5,
+        "height": 5,
+        "tile width": 80,
+        "tile height": 80
+    },
+    "agents": [
+        {
+            "name": "broker",
+            "type": 0
+        },
+        {
+            "name": "consumer 0",
+            "type": 1,
+            "consumption": [
+                {
+                    "amount": 100,
+                    "type": "renewable"
+                },
+                {
+                    "amount": 50,
+                    "type": "other"
+                }
+            ],
+            "positionX": 0,
+            "positionY": 0
+        },
+        {
+            "name": "producer 1",
+            "type": 2,
+            "production": [
+                {
+                    "type": "renewable",
+                    "price": 2
+                },
+                {
+                    "type": "other",
+                    "price": 1
+                }
+            ],
+            "positionX": 4,
+            "positionY": 4
+        },
+        {
+            "name": "producer 2",
+            "type": 2,
+            "production": [
+                {
+                    "type": "renewable",
+                    "price": 2
+                },
+                {
+                    "type": "other",
+                    "price": 1
+                }
+            ],
+            "positionX": 3,
+            "positionY": 3
+        },
+        {
+            "name": "prosumer 1",
+            "type": 3,
+            "production": [
+                {
+                    "type": "renewable",
+                    "price": 2
+                },
+                {
+                    "type": "other",
+                    "price": 1
+                }
+            ],
+            "consumption": [
+                {
+                    "amount": 100,
+                    "type": "renewable"
+                },
+                {
+                    "amount": 50,
+                    "type": "other"
+                }
+            ],
+            "positionX": 0,
+            "positionY": 4
+        },
+        {
+            "name": "prosumer 10",
+            "type": 3,
+            "production": [
+                {
+                    "type": "renewable",
+                    "price": 2
+                },
+                {
+                    "type": "other",
+                    "price": 1
+                }
+            ],
+            "consumption": [
+                {
+                    "amount": 100,
+                    "type": "renewable"
+                },
+                {
+                    "amount": 50,
+                    "type": "other"
+                }
+            ],
+            "positionX": 0,
+            "positionY": 4
+        }
+    ]
+}
