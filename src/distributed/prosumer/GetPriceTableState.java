@@ -15,7 +15,6 @@ public class GetPriceTableState extends OneShotBehaviour {
     @Override
     @SuppressWarnings("unchecked")
     public void action() {
-        System.out.println("Started");
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
         ACLMessage message = prosumer.blockingReceive(mt);
         if(message.getPerformative() == ACLMessage.INFORM) {
@@ -43,12 +42,11 @@ public class GetPriceTableState extends OneShotBehaviour {
                 e.printStackTrace();
             }
         }
-        System.out.println("Ended");
     }
 
     @Override
     public int onEnd() {
-        System.out.println("#############################################################");
+        System.out.println("Ended");
         return super.onEnd();
     }
 

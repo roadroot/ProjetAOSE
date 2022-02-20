@@ -1,9 +1,9 @@
 package distributed.prosumer;
 
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ReceiveEnergyState extends CyclicBehaviour {
+public class ReceiveEnergyState extends OneShotBehaviour {
     public static final String NAME = "receive_energy_state";
     private ProsumerAgent prosumer;
     @Override

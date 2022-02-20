@@ -9,10 +9,8 @@ import main.Position;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import main.Energy;
 import main.GraphicHelper;
@@ -40,15 +38,24 @@ public class ProsumerAgent extends Agent{
         consumption = (ArrayList<Energy>) args[1];
         production = (ArrayList<Energy>) args[2];
         // FSMBehaviour behaviour = new FSMBehaviour(this);
-        ParallelBehaviour pb = new ParallelBehaviour(ParallelBehaviour.WHEN_ALL);
+        // ParallelBehaviour pb = new ParallelBehaviour(ParallelBehaviour.WHEN_ALL);
+        SequentialBehaviour behaviour = new SequentialBehaviour();
+        addBehaviour(behaviour);
+        // add consumer behaviour
+        // SequentialBehaviour consumerBehaviour = new SequentialBehaviour(this);
+        // consumerBehaviour.addSubBehaviour(new RequestPriceTableState(this));
+        // consumerBehaviour.addSubBehaviour(new GetPriceTableState(this));
+        // consumerBehaviour.addSubBehaviour(new RequestEnergyState(this));
+        // consumerBehaviour.addSubBehaviour(new ReceiveEnergyState(this));
+        // pb.addSubBehaviour(consumerBehaviour);
         //addBehaviour(pb);
         // add producer behaviour
-        pb.addSubBehaviour(new CyclicBehaviour(this) {
+        behaviour.addSubBehaviour(new RequestPriceTableState(this));
+        behaviour.addSubBehaviour(new CyclicBehaviour(this) {
             @Override
             public void action() {
-                doWait();
-                MessageTemplate mt = MessageTemplate.or(MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchContent(StringConstants.GET_PRICE_TABLE)), MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
-                ACLMessage message = receive(mt);
+                // MessageTemplate mt = MessageTemplate.or(MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchContent(StringConstants.GET_PRICE_TABLE)), MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
+                ACLMessage message = blockingReceive();
                 if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
                     System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
                     ArrayList<Energy> energies= getProduction();
@@ -61,8 +68,7 @@ public class ProsumerAgent extends Agent{
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-                if(message.getPerformative() == ACLMessage.PROPOSE) {
+                } else if(message.getPerformative() == ACLMessage.PROPOSE) {
                     try {
                         System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
                         Energy energy = (Energy) message.getContentObject();
@@ -82,17 +88,43 @@ public class ProsumerAgent extends Agent{
                     } catch (UnreadableException e) {
                         e.printStackTrace();
                     }
-                }
+                } else if(message.getPerformative() == ACLMessage.INFORM) {
+                    try {
+                        System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
+                        HashMap<String, ArrayList<Energy>> table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
+                        getProviders().clear();
+                        getOffers().clear();
+                        for(int i =0; i<getConsumption().size(); i++) {
+                            String bestOfferer = "";
+                            Energy bestOffer = null;
+                            for(String offerer: table.keySet())
+                                for(Energy offer : table.get(offerer))
+                                    if(offer.type == getConsumption().get(i).type && (bestOffer == null||offer.price<bestOffer.price)) {
+                                        bestOfferer = offerer;
+                                        bestOffer = offer;
+                                    }
+                            if(bestOffer != null) {
+                                getProviders().put(i, bestOfferer);
+                                getOffers().put(i, bestOffer);
+                            }
+                        }
+                        for(int i = 0; i<getOffers().size(); i++) {
+                            if(getOffers().get(i) == null || getProviders().get(i) == null) continue;
+                            ACLMessage reply = new ACLMessage(ACLMessage.PROPOSE);
+                            reply.addReceiver(new AID(getProviders().get(i), AID.ISLOCALNAME));
+                            Energy offer = new Energy(getConsumption().get(i).amount, getConsumption().get(i).type, getOffers().get(i).price);
+                            reply.setContentObject(offer);
+                            send(reply);
+                        }
+                    } catch (UnreadableException|IOException e) {
+                        System.out.println("Error received from " + this.getClass().getName());
+                        e.printStackTrace();
+                    }
+                } else
+                    System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
+
             }
         });
-
-        // add consumer behaviour
-        SequentialBehaviour consumerBehaviour = new SequentialBehaviour(this);
-        consumerBehaviour.addSubBehaviour(new RequestPriceTableState(this));
-        consumerBehaviour.addSubBehaviour(new GetPriceTableState(this));
-        consumerBehaviour.addSubBehaviour(new RequestEnergyState(this));
-        consumerBehaviour.addSubBehaviour(new ReceiveEnergyState(this));
-        pb.addSubBehaviour(consumerBehaviour);
 
         // FSMBehaviour fconsBehaviour = new FSMBehaviour();
         // fconsBehaviour.registerFirstState(new RequestPriceTableState(this), RequestPriceTableState.NAME);
@@ -103,7 +135,7 @@ public class ProsumerAgent extends Agent{
         // fconsBehaviour.registerDefaultTransition(GetPriceTableState.NAME, RequestEnergyState.NAME);
         // fconsBehaviour.registerDefaultTransition(RequestEnergyState.NAME, ReceiveEnergyState.NAME);
         // pb.addSubBehaviour(fconsBehaviour);
-        addBehaviour(pb);
+        // addBehaviour(pb);
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {
