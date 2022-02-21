@@ -1,9 +1,9 @@
 package main;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import jade.wrapper.AgentController;
@@ -12,23 +12,28 @@ import jade.wrapper.AgentController;
 public class ClickHandler implements ActionListener {
     JButton button;
     private boolean enabled;
-    public ClickHandler(JButton button, AgentController agent) {
+    ImageIcon image;
+    public ClickHandler(JButton button, AgentController agent, String name, ImageIcon image) {
         this.button = button;
         this.agent = agent;
+        this.name = name;
+        this.image = image;
+        enabled = true;
     }
-
+    String name;
 
     AgentController agent;
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        enabled = !enabled;
-        if(enabled) {
-            button.setBackground(new Color(255, 255, 255, 0));
-        }
-        else {
-            button.setBackground(new Color(255, 0, 0, 10));
+        if(e.getActionCommand().equals(name)) {
+            enabled = !enabled;
+            if(enabled) {
+                button.setIcon(image);
+            }
+            else {
+                button.setIcon(null);
+            }
         }
     }
 }
