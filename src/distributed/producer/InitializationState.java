@@ -15,7 +15,6 @@ import main.Message;
 public class InitializationState extends CyclicBehaviour {
     public static final String NAME = "init";
     private ProducerAgent producer;
-    private boolean suspended = false;
     @Override
     public void action() {
         ACLMessage message = producer.blockingReceive();
@@ -23,15 +22,13 @@ public class InitializationState extends CyclicBehaviour {
         if(message.getPerformative() == ACLMessage.CANCEL) {
             if(message.getContent().equals(producer.getLocalName())) {
                 System.out.println(producer.getAID().getLocalName() + " is suspended by " + message.getSender().getLocalName());
-                suspended = true;
             }
         } else if(message.getPerformative() == ACLMessage.SUBSCRIBE) {
             if(message.getContent().equals(producer.getLocalName())) {
                 System.out.println(producer.getLocalName() + " is unsuspended by " + message.getSender().getLocalName());
-                suspended = false;
             }
         } else
-        if(!suspended && message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
+        if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             System.out.println(producer.getAID().getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
             ArrayList<Energy> energies= producer.getProduction();
             ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
@@ -43,7 +40,7 @@ public class InitializationState extends CyclicBehaviour {
                 e.printStackTrace();
             }
         } else
-        if(!suspended && message.getPerformative() == ACLMessage.PROPOSE) {
+        if(message.getPerformative() == ACLMessage.PROPOSE) {
             try {
                 System.out.println(producer.getAID().getLocalName() + " received proposal from: " + message.getSender().getLocalName() + ": " + message.getContentObject());
                 Energy energy = (Energy) message.getContentObject();

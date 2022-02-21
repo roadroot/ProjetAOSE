@@ -15,6 +15,7 @@ public class RequestPriceTableState extends OneShotBehaviour {
 
     @Override
     public void action() {
+        consumer.done = false;
         ACLMessage message = new ACLMessage(ACLMessage.REQUEST);
         message.setContent(StringConstants.GET_PRICE_TABLE);
         message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));

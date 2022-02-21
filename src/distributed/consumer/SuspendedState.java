@@ -18,7 +18,6 @@ public class SuspendedState extends OneShotBehaviour {
             consumer.suspended = false;
             System.out.println(consumer.getAID().getLocalName() + " is unsuspended by " + message.getSender().getLocalName());
         }
-        System.out.println("Enden");
     }
 
     public SuspendedState(ConsumerAgent consumer) {

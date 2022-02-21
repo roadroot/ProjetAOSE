@@ -20,7 +20,7 @@ public class GetPriceTablesState extends OneShotBehaviour {
     @Override
     @SuppressWarnings("unchecked")
     public void action() {
-        if(broker.table != null && broker.table.size() <= GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size()) {
+        if(broker.table != null && broker.table.size() < GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size()) {
             MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
             ACLMessage message = broker.blockingReceive(mt);
             GraphicHelper.messages.add(new Message(message));

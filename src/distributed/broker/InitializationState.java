@@ -41,6 +41,7 @@ public class InitializationState extends OneShotBehaviour {
             decision = GET_TABLES;
         } else if(message.getPerformative() == ACLMessage.CANCEL) {
             if(GraphicHelper.agentTypes.get(message.getContent()) != 1) {
+                broker.table = new HashMap<>();
                 for(String agent : GraphicHelper.getConsumers()) {
                     ACLMessage reply = new ACLMessage(ACLMessage.CANCEL);
                     reply.setContent(message.getContent());
@@ -55,7 +56,8 @@ public class InitializationState extends OneShotBehaviour {
                 }
             }
         } else if(message.getPerformative() == ACLMessage.SUBSCRIBE) {
-            if(GraphicHelper.getProducers().contains(message.getContent()) || GraphicHelper.getProsumers().contains(message.getContent())){
+            if(GraphicHelper.agentTypes.get(message.getContent()) != 1){
+                broker.table = new HashMap<>();
                 for(String agent : GraphicHelper.getConsumers()) {
                     ACLMessage reply = new ACLMessage(ACLMessage.SUBSCRIBE);
                     reply.setContent(message.getContent());

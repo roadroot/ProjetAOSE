@@ -24,7 +24,7 @@ public class ReceiveEnergyState extends Behaviour {
             }
         } else if(message.getPerformative() == ACLMessage.SUBSCRIBE) {
             if(!message.getContent().equals(consumer.getLocalName()) && GraphicHelper.getProducers().contains(message.getContent())) {
-                consumer.suspended = true;
+                consumer.done = true;
             }
         } else
             System.out.println(consumer.getAID().getLocalName() + " received energy from " + message.getSender().getLocalName() + ": " + message.getContent());

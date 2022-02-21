@@ -25,6 +25,10 @@ public class GetPriceTableState extends OneShotBehaviour {
         try {
             System.out.println(consumer.getAID().getLocalName() + " received complete price table from " + message.getSender().getLocalName() + " " + message.getContentObject());
             consumer.table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
+            for(int i : consumer.getProviders().keySet()) {
+                consumer.getProviders().replace(i, null);
+                consumer.getOffers().replace(i, null);
+            }
             for(int i =0; i<consumer.getConsumption().size(); i++) {
                 String bestOfferer = "";
                 Energy bestOffer = null;

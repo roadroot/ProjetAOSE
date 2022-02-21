@@ -40,16 +40,17 @@ public class ConsumerAgent extends Agent {
 
         // FSMBehaviour behaviour = new FSMBehaviour(this);
         FSMBehaviour cyclicBehaviour = new FSMBehaviour(this);
-        SequentialBehaviour subscribeToEnergy = new SequentialBehaviour(this);
-        cyclicBehaviour.registerFirstState(subscribeToEnergy, "cb");
-        cyclicBehaviour.registerState(subscribeToEnergy, "cb");
-        cyclicBehaviour.registerDefaultTransition("cb", "cb");
+        cyclicBehaviour.registerFirstState(new RequestPriceTableState(this), RequestPriceTableState.NAME);
+        cyclicBehaviour.registerFirstState(new GetPriceTableState(this), GetPriceTableState.NAME);
+        cyclicBehaviour.registerFirstState(new RequestEnergyState(this), RequestEnergyState.NAME);
+        cyclicBehaviour.registerFirstState(new ReceiveEnergyState(this), ReceiveEnergyState.NAME);
+        cyclicBehaviour.registerFirstState(new SuspendedState(this), SuspendedState.NAME);
+        cyclicBehaviour.registerDefaultTransition(RequestPriceTableState.NAME, GetPriceTableState.NAME);
+        cyclicBehaviour.registerDefaultTransition(GetPriceTableState.NAME, RequestEnergyState.NAME);
+        cyclicBehaviour.registerDefaultTransition(RequestEnergyState.NAME, ReceiveEnergyState.NAME);
+        cyclicBehaviour.registerDefaultTransition(ReceiveEnergyState.NAME, SuspendedState.NAME);
+        cyclicBehaviour.registerDefaultTransition(SuspendedState.NAME, RequestPriceTableState.NAME);
         addBehaviour(cyclicBehaviour);
-        subscribeToEnergy.addSubBehaviour(new RequestPriceTableState(this));
-        subscribeToEnergy.addSubBehaviour(new GetPriceTableState(this));
-        subscribeToEnergy.addSubBehaviour(new RequestEnergyState(this));
-        subscribeToEnergy.addSubBehaviour(new ReceiveEnergyState(this));
-        subscribeToEnergy.addSubBehaviour(new SuspendedState(this));
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {
