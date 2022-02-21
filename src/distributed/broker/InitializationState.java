@@ -7,6 +7,7 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import main.GraphicHelper;
+import main.Message;
 
 public class InitializationState extends OneShotBehaviour {
     public static final String NAME = "init";
@@ -17,22 +18,25 @@ public class InitializationState extends OneShotBehaviour {
     @Override
     public void action() {
         ACLMessage message = broker.blockingReceive();
-        System.out.println(broker.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + " InitialeState " + message.getContent());
+        GraphicHelper.messages.add(new Message(message));
+        System.out.println(broker.getAID().getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             broker.tableRequest = message.getSender();
-            for(String agent : GraphicHelper.getProducers()) {
-                ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
-                requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
-                requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
-                broker.send(requestMessage);
+            if(broker.table != null && broker.table.size() <= GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size()) {
+                for(String agent : GraphicHelper.getProducers()) {
+                    ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
+                    requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
+                    requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
+                    broker.send(requestMessage);
+                }
+                for(String agent : GraphicHelper.getProsumers()) {
+                    ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
+                    requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
+                    requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
+                    broker.send(requestMessage);
+                }
+                broker.table = new HashMap<>();
             }
-            for(String agent : GraphicHelper.getProsumers()) {
-                ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
-                requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
-                requestMessage.setContent(StringConstants.GET_PRICE_TABLE);
-                broker.send(requestMessage);
-            }
-            broker.table = new HashMap<>();
             decision = GET_TABLES;
         }
         // try {

@@ -8,6 +8,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import main.Energy;
 import main.GraphicHelper;
+import main.Message;
 
 public class GetPriceTablesState extends OneShotBehaviour {
     public static final String NAME = "get_price_tables";
@@ -22,8 +23,9 @@ public class GetPriceTablesState extends OneShotBehaviour {
 
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
         ACLMessage message = broker.blockingReceive(mt);
+        GraphicHelper.messages.add(new Message(message));
         try {
-            System.out.println(broker.getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
+            System.out.println(broker.getAID().getLocalName() + ": received price table from: " + message.getSender().getLocalName() + " " + message.getContentObject());
             broker.table.put(message.getSender().getLocalName(), (ArrayList<Energy>) message.getContentObject());
 
             if(broker.table.keySet().size() == GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size())

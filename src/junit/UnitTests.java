@@ -7,7 +7,6 @@ import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.AgentContainer;
 
-import java.util.Map;
 import main.* ;
 
 public class UnitTests {

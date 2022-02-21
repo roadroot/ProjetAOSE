@@ -14,6 +14,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import main.Energy;
 import main.GraphicHelper;
+import main.Message;
 
 public class ProsumerAgent extends Agent{
     private HashMap<Integer, String> providers = new HashMap<>();
@@ -54,10 +55,10 @@ public class ProsumerAgent extends Agent{
         behaviour.addSubBehaviour(new CyclicBehaviour(this) {
             @Override
             public void action() {
-                // MessageTemplate mt = MessageTemplate.or(MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.REQUEST), MessageTemplate.MatchContent(StringConstants.GET_PRICE_TABLE)), MessageTemplate.MatchPerformative(ACLMessage.PROPOSE));
                 ACLMessage message = blockingReceive();
+                GraphicHelper.messages.add(new Message(message));
                 if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
-                    System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContent());
+                    System.out.println(getAID().getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
                     ArrayList<Energy> energies= getProduction();
                     ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
                     try {
@@ -70,7 +71,7 @@ public class ProsumerAgent extends Agent{
                     }
                 } else if(message.getPerformative() == ACLMessage.PROPOSE) {
                     try {
-                        System.out.println(getAID().getLocalName() + " " + message.getSender().getLocalName() + " " + message.getContentObject());
+                        System.out.println(getAID().getLocalName() + " received proposal from " + message.getSender().getLocalName() + ": " + message.getContentObject());
                         Energy energy = (Energy) message.getContentObject();
                         boolean valid = false;
                         for(Energy prod:getProduction()) {
