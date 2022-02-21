@@ -20,23 +20,24 @@ public class GetPriceTablesState extends OneShotBehaviour {
     @Override
     @SuppressWarnings("unchecked")
     public void action() {
+        if(broker.table != null && broker.table.size() <= GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size()) {
+            MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+            ACLMessage message = broker.blockingReceive(mt);
+            GraphicHelper.messages.add(new Message(message));
+            try {
+                System.out.println(broker.getAID().getLocalName() + ": received price table from: " + message.getSender().getLocalName() + " " + message.getContentObject());
+                broker.table.put(message.getSender().getLocalName(), (ArrayList<Energy>) message.getContentObject());
 
-        MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-        ACLMessage message = broker.blockingReceive(mt);
-        GraphicHelper.messages.add(new Message(message));
-        try {
-            System.out.println(broker.getAID().getLocalName() + ": received price table from: " + message.getSender().getLocalName() + " " + message.getContentObject());
-            broker.table.put(message.getSender().getLocalName(), (ArrayList<Energy>) message.getContentObject());
-
-            if(broker.table.keySet().size() == GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size())
-                decision = SEND_TABLE;
-            else
-                decision = GET_OTHER;
-
-        } catch (UnreadableException e) {
-            System.out.println("Error received from " + this.getClass().getName());
-            e.printStackTrace();
+            } catch (UnreadableException e) {
+                System.out.println("Error received from " + this.getClass().getName());
+                e.printStackTrace();
+            }
         }
+        if(broker.table.keySet().size() == GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size())
+            decision = SEND_TABLE;
+        else
+            decision = GET_OTHER;
+
     }
 
     public GetPriceTablesState(BrokerAgent broker) {
