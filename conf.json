@@ -11,24 +11,6 @@
             "type": 0
         },
         {
-            "name": "consumer 0",
-            "type": 1,
-            "consumption": [
-                {
-                    "amount": 100,
-                    "type": "renewable",
-                    "duration": 2
-                },
-                {
-                    "amount": 50,
-                    "type": "other",
-                    "duration": 24
-                }
-            ],
-            "positionX": 0,
-            "positionY": 0
-        },
-        {
             "name": "producer 1",
             "type": 2,
             "production": [
@@ -45,62 +27,8 @@
             "positionY": 4
         },
         {
-            "name": "producer 2",
-            "type": 2,
-            "production": [
-                {
-                    "type": "renewable",
-                    "price": 2
-                },
-                {
-                    "type": "other",
-                    "price": 1
-                }
-            ],
-            "positionX": 3,
-            "positionY": 3
-        },
-        {
-            "name": "prosumer 1",
-            "type": 3,
-            "production": [
-                {
-                    "type": "renewable",
-                    "price": 2
-                },
-                {
-                    "type": "other",
-                    "price": 1
-                }
-            ],
-            "consumption": [
-                {
-                    "amount": 100,
-                    "type": "renewable",
-                    "duration": 3
-                },
-                {
-                    "amount": 50,
-                    "type": "other",
-                    "duration": 24
-                }
-            ],
-            "positionX": 0,
-            "positionY": 4
-        },
-        {
-            "name": "prosumer 10",
-            "type": 3,
-            "production": [
-                {
-                    "type": "renewable",
-                    "price": 2
-                },
-                {
-                    "type": "other",
-                    "price": 1
-                }
-            ],
+            "name": "consumer 10",
+            "type": 1,
             "consumption": [
                 {
                     "amount": 100,

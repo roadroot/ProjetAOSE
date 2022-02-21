@@ -16,6 +16,7 @@ public class App {
         Profile config = new ProfileImpl("localhost", 8755, null);
         config.setParameter("gui", "false");
         AgentContainer mc = runtime.createMainContainer(config);
+        mc.createNewAgent("GraphicHelper", GraphicHelper.class.getName(), null).start();
         Configuration conf = new Configuration("conf.json", mc);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFrame f=new JFrame();
@@ -30,6 +31,7 @@ public class App {
                 buttons[i][j].setSize(conf.getTileWidth(), conf.getTileHeight());
                 f.add(buttons[i][j]);
             }
+
         conf.getAgents().get(GraphicHelper.getBroker()).start();
 
         for(String agent : GraphicHelper.getProducers()) {

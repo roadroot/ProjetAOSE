@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import jade.core.Agent;
+import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import main.Energy;
 import main.Position;
@@ -13,6 +14,9 @@ public class ConsumerAgent extends Agent {
     private HashMap<Integer, Energy> offers = new HashMap<>();
     private ArrayList<Energy> consumption;
     private Position position;
+    protected boolean suspended;
+    protected boolean done;
+
     protected HashMap<String, ArrayList<Energy>> table = null;
     public Position getPosition() {
         return position;
@@ -35,18 +39,17 @@ public class ConsumerAgent extends Agent {
         }
 
         // FSMBehaviour behaviour = new FSMBehaviour(this);
-        SequentialBehaviour behaviour = new SequentialBehaviour(this);
-        addBehaviour(behaviour);
-        // behaviour.registerFirstState(new InitializationState(this), InitializationState.NAME);
-        // behaviour.registerState(new SequentialBehaviour(this), ReceiveEnergyState.NAME);
-        // behaviour.registerLastState(new FinalState(), FinalState.NAME);
-        behaviour.addSubBehaviour(new InitializationState(this));
+        FSMBehaviour cyclicBehaviour = new FSMBehaviour(this);
         SequentialBehaviour subscribeToEnergy = new SequentialBehaviour(this);
-        behaviour.addSubBehaviour(subscribeToEnergy);
+        cyclicBehaviour.registerFirstState(subscribeToEnergy, "cb");
+        cyclicBehaviour.registerState(subscribeToEnergy, "cb");
+        cyclicBehaviour.registerDefaultTransition("cb", "cb");
+        addBehaviour(cyclicBehaviour);
         subscribeToEnergy.addSubBehaviour(new RequestPriceTableState(this));
         subscribeToEnergy.addSubBehaviour(new GetPriceTableState(this));
         subscribeToEnergy.addSubBehaviour(new RequestEnergyState(this));
         subscribeToEnergy.addSubBehaviour(new ReceiveEnergyState(this));
+        subscribeToEnergy.addSubBehaviour(new SuspendedState(this));
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {

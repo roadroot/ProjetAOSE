@@ -17,6 +17,7 @@ public class InitializationState extends OneShotBehaviour {
     private BrokerAgent broker;
     @Override
     public void action() {
+        decision = NONE;
         ACLMessage message = broker.blockingReceive();
         GraphicHelper.messages.add(new Message(message));
         System.out.println(broker.getAID().getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
@@ -38,12 +39,37 @@ public class InitializationState extends OneShotBehaviour {
                 broker.table = new HashMap<>();
             }
             decision = GET_TABLES;
+        } else if(message.getPerformative() == ACLMessage.CANCEL) {
+            if(GraphicHelper.agentTypes.get(message.getContent()) != 1) {
+                for(String agent : GraphicHelper.getConsumers()) {
+                    ACLMessage reply = new ACLMessage(ACLMessage.CANCEL);
+                    reply.setContent(message.getContent());
+                    reply.addReceiver(new AID(agent, AID.ISLOCALNAME));
+                    broker.send(reply);
+                }
+                for(String agent : GraphicHelper.getProsumers()) {
+                    ACLMessage reply = new ACLMessage(ACLMessage.CANCEL);
+                    reply.setContent(message.getContent());
+                    reply.addReceiver(new AID(agent, AID.ISLOCALNAME));
+                    broker.send(reply);
+                }
+            }
+        } else if(message.getPerformative() == ACLMessage.SUBSCRIBE) {
+            if(GraphicHelper.getProducers().contains(message.getContent()) || GraphicHelper.getProsumers().contains(message.getContent())){
+                for(String agent : GraphicHelper.getConsumers()) {
+                    ACLMessage reply = new ACLMessage(ACLMessage.SUBSCRIBE);
+                    reply.setContent(message.getContent());
+                    reply.addReceiver(new AID(agent, AID.ISLOCALNAME));
+                    broker.send(reply);
+                }
+                for(String agent : GraphicHelper.getProsumers()) {
+                    ACLMessage reply = new ACLMessage(ACLMessage.SUBSCRIBE);
+                    reply.setContent(message.getContent());
+                    reply.addReceiver(new AID(agent, AID.ISLOCALNAME));
+                    broker.send(reply);
+                }
+            }
         }
-        // try {
-        //     System.out.println(broker.receive().getContentObject());
-        // } catch (UnreadableException e) {
-        //     e.printStackTrace();
-        // }
     }
 
     public InitializationState(BrokerAgent broker) {

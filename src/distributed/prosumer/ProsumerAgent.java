@@ -53,12 +53,34 @@ public class ProsumerAgent extends Agent{
         // add producer behaviour
         behaviour.addSubBehaviour(new RequestPriceTableState(this));
         behaviour.addSubBehaviour(new CyclicBehaviour(this) {
+            boolean done = false;
             @Override
             public void action() {
                 ACLMessage message = blockingReceive();
                 GraphicHelper.messages.add(new Message(message));
-                if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
-                    System.out.println(getAID().getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
+                if(message.getPerformative() == ACLMessage.CANCEL) {
+                    if(message.getContent().equals(getLocalName())) {
+                        System.out.println(getLocalName() + " is suspended by " + message.getSender().getLocalName());
+                        done = true;
+                    } else if(getProviders().values().contains(message.getContent())) {
+                        System.out.println(getLocalName() + ": one of my providers got suspended, message received from: " + message.getSender().getLocalName());
+                        done = true;
+                    }
+                } else if(message.getPerformative() == ACLMessage.SUBSCRIBE) {
+                    if(done && message.getContent().equals(getLocalName())) {
+                        System.out.println(getLocalName() + " is unsuspended by " + message.getSender().getLocalName());
+                        done = false;
+                        ACLMessage reply = new ACLMessage(ACLMessage.REQUEST);
+                        reply.setContent(StringConstants.GET_PRICE_TABLE);
+                        reply.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
+                        send(reply);
+                    }
+                    if(!message.getContent().equals(getLocalName()) && GraphicHelper.getProducers().contains(message.getContent())) {
+                        done = true;
+                    }
+                } else
+                if(!done && message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
+                    System.out.println(getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
                     ArrayList<Energy> energies= getProduction();
                     ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
                     try {
@@ -69,9 +91,9 @@ public class ProsumerAgent extends Agent{
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
-                } else if(message.getPerformative() == ACLMessage.PROPOSE) {
+                } else if(!done && message.getPerformative() == ACLMessage.PROPOSE) {
                     try {
-                        System.out.println(getAID().getLocalName() + " received proposal from " + message.getSender().getLocalName() + ": " + message.getContentObject());
+                        System.out.println(getLocalName() + " received proposal from " + message.getSender().getLocalName() + ": " + message.getContentObject());
                         Energy energy = (Energy) message.getContentObject();
                         boolean valid = false;
                         for(Energy prod:getProduction()) {
@@ -89,9 +111,9 @@ public class ProsumerAgent extends Agent{
                     } catch (UnreadableException e) {
                         e.printStackTrace();
                     }
-                } else if(message.getPerformative() == ACLMessage.INFORM) {
+                } else if(!done && message.getPerformative() == ACLMessage.INFORM) {
                     try {
-                        System.out.println(getAID().getLocalName() + ": " + message.getSender().getLocalName() + " requested energy: " + message.getContentObject());
+                        System.out.println(getLocalName() + ": " + message.getSender().getLocalName() + " requested energy: " + message.getContentObject());
                         HashMap<String, ArrayList<Energy>> table = (HashMap<String, ArrayList<Energy>>) message.getContentObject();
                         getProviders().clear();
                         getOffers().clear();
@@ -122,11 +144,10 @@ public class ProsumerAgent extends Agent{
                         e.printStackTrace();
                     }
                 } else
-                    System.out.println(getAID().getLocalName() + ": received energy from " + message.getSender().getLocalName() + " :" + message.getContent());
+                    System.out.println(getLocalName() + ": received energy from " + message.getSender().getLocalName() + " :" + message.getContent());
 
             }
         });
-
         System.out.println(this.getClass().getName() + " " + getLocalName() + " set up");
     }
     public ArrayList<Energy> getConsumption() {

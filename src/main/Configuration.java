@@ -75,6 +75,7 @@ public class Configuration {
                 String agentName = (String) agentJ.get(AGENT_NAME);
                 int agentType = (int) agentJ.get(AGENT_TYPE);
                 GraphicHelper.agentTypes.put(agentName, agentType);
+                GraphicHelper.agents.add(agentName);
                 if(agentType == 0) {
                     AgentController ac = mc.createNewAgent(agentName, BrokerAgent.class.getName(), null);
                     agents.put(agentName, ac);

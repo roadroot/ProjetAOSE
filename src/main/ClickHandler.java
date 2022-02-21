@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 
 
@@ -29,9 +31,21 @@ public class ClickHandler implements ActionListener {
         if(e.getActionCommand().equals(name)) {
             enabled = !enabled;
             if(enabled) {
+                GraphicHelper.addAgent(name);
+                ACLMessage message = new ACLMessage(ACLMessage.SUBSCRIBE);
+                message.setContent(name);
+                message.addReceiver(new AID(name, AID.ISLOCALNAME));
+                message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
+                GraphicHelper.agent.send(message);
                 button.setIcon(image);
             }
             else {
+                GraphicHelper.suspendAgent(name);
+                ACLMessage message = new ACLMessage(ACLMessage.CANCEL);
+                message.setContent(name);
+                message.addReceiver(new AID(name, AID.ISLOCALNAME));
+                message.addReceiver(new AID(GraphicHelper.getBroker(), AID.ISLOCALNAME));
+                GraphicHelper.agent.send(message);
                 button.setIcon(null);
             }
         }
