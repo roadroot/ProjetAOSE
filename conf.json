@@ -27,8 +27,18 @@
             "positionY": 4
         },
         {
-            "name": "consumer 10",
-            "type": 1,
+            "name": "prosumer 10",
+            "type": 3,
+            "production": [
+                {
+                    "type": "renewable",
+                    "price": 2
+                },
+                {
+                    "type": "other",
+                    "price": 1
+                }
+            ],
             "consumption": [
                 {
                     "amount": 100,
