@@ -16,6 +16,9 @@ public class UnitTests {
   private static int EXPECTED_NB_CONSUMERS = 1 ;
   private static int EXPECTED_NB_PRODUCERS = 2 ;
   private static int EXPECTED_NB_PROSUMERS = 1 ;
+  private static int EXPECTED_ENERGY_AMOUNT = 100 ;
+  private static int EXPECTED_ENERGY_TYPE = EnergyType.RENEWABLE ;
+  private static int EXPECTED_ENERGY_DURATION = 2 ;
   
   private Configuration conf ;
   private Energy ener ;
@@ -27,7 +30,7 @@ public class UnitTests {
     config.setParameter("gui", "false");
     AgentContainer mc = runtime.createMainContainer(config);
     conf = new Configuration(FILE_CONF, mc) ;
-    ener = new Energy(100, EnergyType.RENEWABLE, 2);
+    ener = new Energy(EXPECTED_ENERGY_AMOUNT, EXPECTED_ENERGY_TYPE , EXPECTED_ENERGY_DURATION);
   }
   
   
