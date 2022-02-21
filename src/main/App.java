@@ -36,17 +36,20 @@ public class App {
         for(String agent : GraphicHelper.getProducers()) {
             buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/producer.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
             buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setEnabled(true);
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].addActionListener(new ClickHandler(buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()], conf.getAgents().get(agent)));
             conf.getAgents().get(agent).start();
         }
         for(String agent : GraphicHelper.getProsumers()) {
             buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/prosumer.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
             buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setEnabled(true);
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].addActionListener(new ClickHandler(buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()], conf.getAgents().get(agent)));
             conf.getAgents().get(agent).start();
 
         }
         for(String agent : GraphicHelper.getConsumers()) {
             buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setIcon(new ImageIcon((new ImageIcon("resources/consumer.png")).getImage().getScaledInstance(conf.getTileWidth()*3/4, conf.getTileHeight()*3/4, 0)));
             buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].setEnabled(true);
+            buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()].addActionListener(new ClickHandler(buttons[GraphicHelper.positions.get(agent).getX()][GraphicHelper.positions.get(agent).getY()], conf.getAgents().get(agent)));
             conf.getAgents().get(agent).start();
         }
         f.setSize(conf.getSquareWidth(), conf.getSquareHeight());

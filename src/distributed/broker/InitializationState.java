@@ -22,7 +22,7 @@ public class InitializationState extends OneShotBehaviour {
         System.out.println(broker.getAID().getLocalName() + " received from " + message.getSender().getLocalName() + ": " + message.getContent());
         if(message.getPerformative() == ACLMessage.REQUEST && message.getContent().equals(StringConstants.GET_PRICE_TABLE)) {
             broker.tableRequest = message.getSender();
-            if(broker.table != null && broker.table.size() <= GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size()) {
+            if(broker.table == null || broker.table.size() <= GraphicHelper.getProducers().size() + GraphicHelper.getProsumers().size()) {
                 for(String agent : GraphicHelper.getProducers()) {
                     ACLMessage requestMessage = new ACLMessage(ACLMessage.REQUEST);
                     requestMessage.addReceiver(new AID(agent, AID.ISLOCALNAME));
