@@ -17,7 +17,10 @@ public class App {
         config.setParameter("gui", "false");
         AgentContainer mc = runtime.createMainContainer(config);
         mc.createNewAgent("GraphicHelper", GraphicHelper.class.getName(), null).start();
-        Configuration conf = new Configuration("conf.json", mc);
+        String file = "conf.json";
+        if(args.length == 1)
+            file = args[0];
+        Configuration conf = new Configuration(file, mc);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFrame f=new JFrame();
         GridLayout g = new GridLayout(conf.getWidth(), conf.getHeight());
